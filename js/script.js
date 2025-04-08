@@ -85,6 +85,9 @@ for (let i = 0; i < months.length; i++) {
   option.classList += " calendar-select-list";
   option.id = `option-${i}`;
   option.value = i;
+  if (currentMonth === i) {
+    option.classList += " month active";
+  }
   option.addEventListener("click", function () {
     toggleDropdownMonth(i, months[i]); // Pass index and month name if needed
   });
@@ -96,8 +99,9 @@ for (let i = currentYear - 50; i <= currentYear + 50; i++) {
   let option = document.createElement("div");
   option.classList += " calendar-select-list";
   option.value = i;
-  if (currentMonth === i) {
-    option.classList += " active";
+  option.id = `option-${i}`;
+  if (currentYear === i) {
+    option.classList += " year active";
   }
   option.textContent = i;
   option.addEventListener("click", function () {
@@ -105,10 +109,28 @@ for (let i = currentYear - 50; i <= currentYear + 50; i++) {
   });
   yearSelect.appendChild(option);
 }
+const backdrop = document.getElementById("calendar-backdrop");
+const calendarWrapper = document.getElementById("calendar-wrapper");
+backdrop.addEventListener("click", (e) => {
+  e.stopPropagation(); // prevent bubbling
+  calendarWrapper.classList.add("show-calender");
+});
+
+// Close calendar when clicking anywhere else
+document.addEventListener("click", (e) => {
+  if (!calendarWrapper.contains(e.target) && !backdrop.contains(e.target)) {
+    calendarWrapper.classList.remove("show-calender");
+    toggleDropdownMonth();
+    toggleDropdownYear();
+  }
+});
 
 monthSelect.value = currentMonth;
 yearSelect.value = currentYear;
-
+const toggleCalender = () => {
+  const div = document.getElementById("calendar-wrapper");
+  div.classList.toggle("show-calender");
+};
 const toggleDropdownMonth = (index, month) => {
   const div = document.getElementById("month-select");
   const year_div = document.getElementById("year-select");
@@ -117,10 +139,13 @@ const toggleDropdownMonth = (index, month) => {
     // const dropdown = document.getElementById("selected-month");
     // dropdown.innerText = month;
     currentMonth = index;
-    console.log("month", index);
+    document
+      .querySelectorAll(".calendar-select-list.month.active")
+      .forEach((el) => {
+        el.classList.remove("active");
+      });
     const div_option = document.getElementById(`option-${index}`);
-    console.log("div_option", div_option);
-    div_option.classList += " active";
+    div_option.classList += " month active";
     renderCalendar();
   }
   div.classList.toggle("show-dropdown");
@@ -134,6 +159,13 @@ const toggleDropdownYear = (year) => {
     // const dropdown = document.getElementById("selected-year");
     // dropdown.innerText = year;
     currentYear = year;
+    document
+      .querySelectorAll(".calendar-select-list.year.active")
+      .forEach((el) => {
+        el.classList.remove("active");
+      });
+    const div_option = document.getElementById(`option-${year}`);
+    div_option.classList += " year active";
     renderCalendar();
   }
   div.classList.toggle("show-dropdown");

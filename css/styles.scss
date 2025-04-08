@@ -14,159 +14,193 @@ body {
   background: #02162b;
   font-family: "Poppins", sans-serif;
 }
-
-.calendar-wrapper {
-  background: #00283a;
-  width: 450px;
-  border-radius: 10px;
-  position: relative;
-  &::before {
-    content: "";
-    position: absolute;
-    left: 30px;
-    top: -8px;
-    height: 8px;
-    width: calc(100% - 60px);
-    background-color: #00283a;
-    border-radius: 10px 10px 0 0;
-    opacity: 0.3;
-  }
-  .calendar-header {
+.calendar-main {
+  .calendar-drop-main {
     display: flex;
     align-items: center;
-    padding: 25px 30px 10px;
     justify-content: space-between;
-    .calendar-select-main {
+    gap: 15px;
+    background: #00283a;
+    padding: 12px;
+    border-radius: 6px;
+    width: 450px;
+    cursor: pointer;
+    position: relative;
+    &::before {
+      content: "";
+      position: absolute;
+      left: 30px;
+      top: -8px;
+      height: 8px;
+      width: calc(100% - 60px);
+      background-color: #00283a;
+      border-radius: 10px 10px 0 0;
+      opacity: 0.3;
+    }
+    .calendar-drop-text {
+      font-size: 16px;
+      line-height: 26px;
+      color: #fff;
+    }
+  }
+  .calendar-wrapper {
+    display: none;
+    background: #00283a;
+    width: 450px;
+    border-radius: 10px;
+    position: relative;
+    margin-top: 10px;
+    &.show-calender {
+      display: block;
+    }
+    // &::before {
+    //   content: "";
+    //   position: absolute;
+    //   left: 30px;
+    //   top: -8px;
+    //   height: 8px;
+    //   width: calc(100% - 60px);
+    //   background-color: #00283a;
+    //   border-radius: 10px 10px 0 0;
+    //   opacity: 0.3;
+    // }
+    .calendar-header {
       display: flex;
       align-items: center;
-      gap: 10px;
-      .calendar-select-wrapper {
+      padding: 25px 30px 10px;
+      justify-content: space-between;
+      .calendar-select-main {
         display: flex;
+        align-items: center;
         gap: 10px;
+        .calendar-select-wrapper {
+          display: flex;
+          gap: 10px;
 
-        .calendar-select {
-          background-color: transparent;
-          color: #fff;
-          font-size: 24px;
-          line-height: 26px;
-          font-weight: 500;
-          color: #fff;
-          border: 0;
-          outline: none;
-          position: relative;
-          .calendar-select-list-wrap {
-            display: none;
-            position: absolute;
-            top: 45px;
-            left: 0;
-            background: #02162b;
-            border-radius: 4px;
-            z-index: 9;
-            width: 150px;
-            height: calc(100% + 280px);
-            overflow: auto;
-            padding: 5px;
-            box-shadow: 0 0 5px 5px #0000001f;
-            &.show-dropdown {
-              display: block;
-            }
-            &::-webkit-scrollbar {
-              width: 4px;
-            }
-            &::-webkit-scrollbar-thumb {
-              background: #888;
-              border-radius: 20px;
-            }
-            .calendar-select-list {
-              font-size: 16px;
-              line-height: 26px;
-              font-weight: 500;
-              color: #fff;
-              padding: 10px 20px;
+          .calendar-select {
+            background-color: transparent;
+            color: #fff;
+            font-size: 24px;
+            line-height: 26px;
+            font-weight: 500;
+            color: #fff;
+            border: 0;
+            outline: none;
+            position: relative;
+            .calendar-select-list-wrap {
+              display: none;
+              position: absolute;
+              top: 45px;
+              left: 0;
+              background: #02162b;
               border-radius: 4px;
-              cursor: pointer;
-              transition: all 0.3s ease-in-out;
-              &:hover,
-              &.active {
-                background-color: #00283a;
+              z-index: 9;
+              width: 150px;
+              height: calc(100% + 280px);
+              overflow: auto;
+              padding: 5px;
+              box-shadow: 0 0 5px 5px #0000001f;
+              &.show-dropdown {
+                display: block;
+              }
+              &::-webkit-scrollbar {
+                width: 4px;
+              }
+              &::-webkit-scrollbar-thumb {
+                background: #888;
+                border-radius: 20px;
+              }
+              .calendar-select-list {
+                font-size: 16px;
+                line-height: 26px;
+                font-weight: 500;
+                color: #fff;
+                padding: 10px 20px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 0.3s ease-in-out;
+                &:hover,
+                &.active {
+                  background-color: #00283a;
+                }
               }
             }
           }
         }
       }
-    }
-    .icons {
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      span {
-        width: 35px;
-        height: 35px;
+      .icons {
         display: flex;
         align-items: center;
-        justify-content: center;
-        border-radius: 50px;
-        cursor: pointer;
-        svg {
-          stroke: #fff;
-        }
-        &:hover {
-          background: #02162b;
+        gap: 5px;
+        span {
+          width: 35px;
+          height: 35px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 50px;
+          cursor: pointer;
+          svg {
+            stroke: #fff;
+          }
+          &:hover {
+            background: #02162b;
+          }
         }
       }
     }
-  }
-  .calendar {
-    padding: 20px;
-    ul {
-      display: flex;
-      list-style: none;
-      flex-wrap: wrap;
-      text-align: center;
-      li {
+    .calendar {
+      padding: 20px;
+      ul {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-        height: 50px;
-        width: calc(100% / 7);
-        color: #fff;
-      }
-    }
-    .weeks {
-      li {
-        text-transform: capitalize;
-      }
-    }
-    .days {
-      li {
-        z-index: 1;
-        cursor: pointer;
-        &::before {
-          position: absolute;
-          content: "";
-          width: 40px;
-          height: 40px;
-          top: 50%;
-          left: 50%;
-          z-index: -1;
-          border-radius: 50%;
-          transform: translate(-50%, -50%);
-        }
-        &.active {
+        list-style: none;
+        flex-wrap: wrap;
+        text-align: center;
+        li {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          height: 50px;
+          width: calc(100% / 7);
           color: #fff;
-          &::before {
-            background: #02162b;
-            color: #000;
-          }
         }
-        &:hover {
-          &::before {
-            background: #02162b;
-          }
+      }
+      .weeks {
+        li {
+          text-transform: capitalize;
         }
-        &.inactive {
-          color: #919191;
+      }
+      .days {
+        li {
+          z-index: 1;
+          cursor: pointer;
+          &::before {
+            position: absolute;
+            content: "";
+            width: 40px;
+            height: 40px;
+            top: 50%;
+            left: 50%;
+            z-index: -1;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+          }
+          &.active {
+            color: #fff;
+            &::before {
+              background: #02162b;
+              color: #000;
+            }
+          }
+          &:hover {
+            &::before {
+              background: #02162b;
+            }
+          }
+          &.inactive {
+            color: #919191;
+          }
         }
       }
     }
