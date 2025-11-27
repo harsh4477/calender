@@ -64,6 +64,7 @@ const prevNextIcons = document.querySelectorAll(".icons span");
 let date = new Date(),
   currentYear = date.getFullYear(),
   currentMonth = date.getMonth();
+let selectedDateObj = null;
 
 const months = [
   "January",
@@ -89,7 +90,7 @@ for (let i = 0; i < months.length; i++) {
     option.classList += " month active";
   }
   option.addEventListener("click", function () {
-    toggleDropdownMonth(i, months[i]); // Pass index and month name if needed
+    toggleDropdownMonth(i, months[i]);
   });
   option.textContent = months[i];
   monthSelect.appendChild(option);
@@ -105,23 +106,22 @@ for (let i = currentYear - 50; i <= currentYear + 50; i++) {
   }
   option.textContent = i;
   option.addEventListener("click", function () {
-    toggleDropdownYear(i); // Pass index and month name if needed
+    toggleDropdownYear(i); 
   });
   yearSelect.appendChild(option);
 }
 const backdrop = document.getElementById("calendar-backdrop");
 const calendarWrapper = document.getElementById("calendar-wrapper");
 backdrop.addEventListener("click", (e) => {
-  e.stopPropagation(); // prevent bubbling
+  e.stopPropagation(); 
   calendarWrapper.classList.add("show-calender");
 });
 
-// Close calendar when clicking anywhere else
 document.addEventListener("click", (e) => {
   if (!calendarWrapper.contains(e.target) && !backdrop.contains(e.target)) {
     calendarWrapper.classList.remove("show-calender");
-    toggleDropdownMonth();
-    toggleDropdownYear();
+    monthSelect.classList.remove("show-dropdown");
+    yearSelect.classList.remove("show-dropdown");
   }
 });
 
@@ -136,8 +136,7 @@ const toggleDropdownMonth = (index, month) => {
   const year_div = document.getElementById("year-select");
   year_div.classList.remove("show-dropdown");
   if (month) {
-    // const dropdown = document.getElementById("selected-month");
-    // dropdown.innerText = month;
+
     currentMonth = index;
     document
       .querySelectorAll(".calendar-select-list.month.active")
@@ -156,8 +155,7 @@ const toggleDropdownYear = (year) => {
   const month_div = document.getElementById("month-select");
   month_div.classList.remove("show-dropdown");
   if (year) {
-    // const dropdown = document.getElementById("selected-year");
-    // dropdown.innerText = year;
+
     currentYear = year;
     document
       .querySelectorAll(".calendar-select-list.year.active")
@@ -190,13 +188,25 @@ const renderCalendar = () => {
   }
 
   for (let i = 1; i <= lastDateOfMonth; i++) {
-    let isToday =
-      i === date.getDate() &&
-      currentMonth === new Date().getMonth() &&
-      currentYear === new Date().getFullYear()
-        ? 'class="active"'
-        : "";
-    liDayTag += `<li ${isToday}>${i}</li>`;
+    let isToday = "";
+    if (selectedDateObj) {
+        if (
+            i === selectedDateObj.getDate() &&
+            currentMonth === selectedDateObj.getMonth() &&
+            currentYear === selectedDateObj.getFullYear()
+        ) {
+            isToday = 'class="active"';
+        }
+    } else {
+        if (
+            i === date.getDate() &&
+            currentMonth === new Date().getMonth() &&
+            currentYear === new Date().getFullYear()
+        ) {
+            isToday = 'class="active"';
+        }
+    }
+    liDayTag += `<li ${isToday} onclick="selectDate(${i})">${i}</li>`;
   }
 
   for (let i = lastDayOfMonth; i < 6; i++) {
@@ -204,6 +214,24 @@ const renderCalendar = () => {
   }
 
   daysTag.innerHTML = liDayTag;
+};
+
+const selectDate = (day) => {
+  const selectedDateText = document.getElementById("selected-date-text");
+  // Format: DD/MM/YYYY
+  const formattedDate = `${day}/${currentMonth + 1}/${currentYear}`;
+  selectedDateText.innerText = formattedDate;
+  
+  selectedDateObj = new Date(currentYear, currentMonth, day);
+  renderCalendar();
+
+  // Close calendar
+  const calendarWrapper = document.getElementById("calendar-wrapper");
+  calendarWrapper.classList.remove("show-calender");
+  
+  // Close dropdowns if open (just in case)
+  monthSelect.classList.remove("show-dropdown");
+  yearSelect.classList.remove("show-dropdown");
 };
 
 renderCalendar(currentMonth, currentYear);
